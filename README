@@ -3,7 +3,7 @@ RESTed Rogue - A Primer
 RESTed Rogue is the working title for a Flask server that contains a game that is controlled by REST requests.
 This game involves a dungeon with events and a player that can move around.
 
-The server requires Python >=3.6, Flask >= 0.12, Werkzeug >= 0.14, Jinja2 >= 2.10
+The server requires Python >=2.7, Flask >= 0.12, Werkzeug >= 0.14, Jinja2 >= 2.10
 The client interface can be accessed using any Web request generator, manual testing/playthroughs were done with Postman
 
 The REST API includes these endpoints:
