@@ -1,0 +1,25 @@
+RESTed Rogue - A Primer
+
+RESTed Rogue is the working title for a Flask server that contains a game that is controlled by REST requests.
+This game involves a dungeon with events and a player that can move around.
+
+The server requires Python >=3.6, Flask >= 0.12, Werkzeug >= 0.14, Jinja2 >= 2.10
+The client interface can be accessed using any Web request generator, manual testing/playthroughs were done with Postman
+
+The REST API includes these endpoints:
+Start Quest - POST
+/quest/start
+Initializes the quest and creates a player with the provided name within the generated dungeon
+
+End Quest - DELETE
+/quest/end
+Terminates the player session and destroys the dungeon
+
+Move - GET
+/player/move/{room_id}
+If there is no obstruction, moves the player down a path to a new room
+
+Status - GET
+/player/status
+Returns the current info about the player and shows all possible adjacent rooms
+
