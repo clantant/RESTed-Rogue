@@ -25,6 +25,7 @@ class Dungeon:
         self.used = []
         self.rooms = [[[1], "Entrance"]]
         self.room_build()
+        self.floor = 1
         self.event_assign()
         logging.debug("Rooms: " + pformat(self.rooms) + "unused: " + pformat(self.unused))
         self.player = {"name" : name, "pos" : 1}

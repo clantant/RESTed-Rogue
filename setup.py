@@ -3,7 +3,7 @@ try:
 except ImportError:
 	from distutils.core import setup
 setup(name='Restgame',
-	version='0.2',
+	version='0.3',
 	author="Eric Timmerman",
 	author_email = "eet1992@gmail.com",
 	description = ("REST based web game"),
