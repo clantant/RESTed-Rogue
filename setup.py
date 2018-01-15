@@ -9,5 +9,6 @@ setup(name='Restgame',
 	description = ("REST based web game"),
 	url="https://github.com/clantant/RESTed-Rogue",
 	install_requires=['Flask'],
-	packages=['restgame', 'test']
+	test_suite="restgame/test",
+	packages=['restgame']
 	)

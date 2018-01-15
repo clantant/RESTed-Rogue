@@ -1,13 +1,14 @@
 import unittest
-import restgame
+from restgame import *
 
 class DungeonValid(unittest.TestCase):
 
 	def testStartUp(self):
-		self.failUnless(restgame.start("foo"))
+		self.failUnless(start("foo"))
 
 	def testCorrectRoom(self):
-		self.failUnless(restgame.roomcheck(1))
+		inst_test = start("foo")
+		self.failUnless(inst_test.roomcheck(1))
 
 def main():
 	unittest.main()
