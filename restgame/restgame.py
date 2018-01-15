@@ -13,6 +13,12 @@ class Dungeon:
 		self.rooms=[[[2],"Entrance"],[[1,3],"Nothing"],[[2],"Dead-end"]]
 		self.player={"name" : name, "pos" : 1}
 
+	# Internal Helper Functions
+	# Return player's current room, check the room list at the player's position
+	def _players_room(self):
+		return self.rooms[self.player["pos"] - 1]
+
+
 	# Print out dungeon, show every room -> adjacent options
 	def print_dungeon(self):
 		for room in self.rooms:
@@ -29,12 +35,25 @@ class Dungeon:
 		else:
 			return 1
 
+	# Move, this takes a room_id and returns the room_id if the player succeeds
+	# in the move, False if cannot move
+	def move(self, room_id):
+		current_room = self._players_room()
+		if self.roomcheck(room_id):
+			if room_id in current_room[0]:
+				self.player["pos"] = room_id
+				return room_id
+		return False
 
 
 # Start - starts the game and initializes the dungeon object
 def start(name):
 	instance = Dungeon(name)
 	return instance
+
+def end(instance):
+	del(instance)
+	return True
 
 if __name__ == '__main__':
 	curr = start("Harold")
