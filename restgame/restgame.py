@@ -7,6 +7,7 @@ from random import sample
 from random import randint
 from pprint import pformat
 import logging
+import json
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 global CURR
@@ -23,12 +24,16 @@ class Dungeon:
         self.unused = [x for x in range(1, self.cap)]
         self.in_progress = []
         self.used = []
-        self.rooms = [[[1], "Entrance"]]
-        self.room_build()
+        self.reinit()
         self.floor = 1
-        self.event_assign()
         logging.debug("Rooms: " + pformat(self.rooms) + "unused: " + pformat(self.unused))
         self.player = {"name" : name, "pos" : 1}
+
+    def reinit(self):
+        """Rebuild the floor"""
+        self.rooms = [[[1], "Entrance"]]
+        self.room_build()
+        self.event_assign()
 
     def print_dungeon(self):
         """show every room -> adjacent options"""
@@ -56,6 +61,12 @@ class Dungeon:
             if room_id in current_room[0]:
                 self.player["pos"] = room_id
                 return room_id
+        elif room_id == 100:
+            logging.debug("Moving downstairs")
+            self.floor += 1
+            self.reinit()
+            self.player["pos"] = 0
+            return 0
         return False
 
     def room_build(self):
@@ -75,7 +86,7 @@ class Dungeon:
         stairs = randint(1, self.cap - 1)
         logging.debug("Room chosen for stairs: " + pformat(stairs))
         self.rooms[stairs][1] = "The Stairs down!"
-        self.rooms[stairs][0].add('>')
+        self.rooms[stairs][0].add(100)
         for room in self.rooms:
             if room[1] == "":
                 new_event = sample(EVENTS, randint(1, 2))
@@ -83,6 +94,12 @@ class Dungeon:
                     room[1] = ' and '.join(new_event)
                 else:
                     room[1] = str(new_event[0])
+
+    def status(self):
+        """Returns the map of the player's current room"""
+        current_room = self._players_room()
+        stats = json.dumps({"map":{"adjacent_rooms":pformat(current_room[0]),"current_room":pformat(self.player["pos"] - 1)},"floor":pformat(self.floor),"name":pformat(self.player["name"])})
+        return stats
 
     # Internal Helper Functions
     def _players_room(self):
@@ -128,5 +145,6 @@ def end(instance):
 if __name__ == '__main__':
     CURR = start("Harold")
     CURR.print_dungeon()
+    logging.debug(CURR.status())
     logging.debug(CURR.player)
     logging.debug(CURR.rooms[0])
