@@ -20,7 +20,7 @@ class DungeonValid(unittest.TestCase):
 		self.failUnless(inst_test.roomcheck(1))
 
 	def testMoveSuccess(self):
-		self.assertEqual(inst_test.move(2), 2)
+		self.assertEqual(inst_test.move(1), 1)
 
 	def testMoveFail(self):
 		self.assertFalse(inst_test.move(3))
