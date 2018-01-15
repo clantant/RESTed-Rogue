@@ -5,12 +5,13 @@
 # Later there may be a point to refactor the utilities into their own files
 from random import sample
 from random import randint
+from pprint import pformat
 import logging
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 global CURR
 global EVENTS
-EVENTS=['Nothing', 'Monster', 'Treasure', 'Maw of madness', 'Spiraling shape']
+EVENTS = ['Nothing', 'Monster', 'Treasure', 'Maw of madness', 'Spiraling shape']
 
 class Dungeon:
     """this is our main object and represents all of the rooms on 1 floor and the player"""
@@ -25,23 +26,23 @@ class Dungeon:
         self.rooms = [[[1], "Entrance"]]
         self.room_build()
         self.event_assign()
-        logging.debug("Rooms: " + str(self.rooms) + "unused: " + str(self.unused))
+        logging.debug("Rooms: " + pformat(self.rooms) + "unused: " + pformat(self.unused))
         self.player = {"name" : name, "pos" : 1}
 
     def print_dungeon(self):
         """show every room -> adjacent options"""
         for idx, room in enumerate(self.rooms):
-            logging.debug(str(idx) + " " + str(room[1]) + " -> " + str(room[0]))
+            logging.debug(pformat(idx) + " " + pformat(room[1]) + " -> " + pformat(room[0]))
 
     def roomcheck(self, room_id):
         """Room validation utility, can be used for ensuring a room is defined"""
         try:
             self.rooms[int(room_id - 1)]
         except NameError:
-            logging.error("That Room ID: " + str(room_id) + " does not exist")
+            logging.error("That Room ID: " + pformat(room_id) + " does not exist")
             return False
         except IndexError:
-            logging.error("That Room ID: " + str(room_id) + " is unitialized")
+            logging.error("That Room ID: " + pformat(room_id) + " is unitialized")
             return False
         else:
             return 1
@@ -69,17 +70,18 @@ class Dungeon:
             self._clean_lists
 
     def event_assign(self):
-      """Choose end stairs and assign 1 or 2 random events to the rest of the rooms"""
-      stairs = randint(1, self.cap - 1)
-      logging.debug("Room chosen for stairs: " + str(stairs))
-      self.rooms[stairs][1] = "The Stairs down!"
-      for room in self.rooms:
-        if room[1] == "":
-          new_event = sample(EVENTS, randint(1,2))
-          if len(new_event) > 1:
-            room[1] = ' and '.join(new_event)
-          else:
-            room[1] = str(new_event[0])
+        """Choose end stairs and assign 1 or 2 random events to the rest of the rooms"""
+        stairs = randint(1, self.cap - 1)
+        logging.debug("Room chosen for stairs: " + pformat(stairs))
+        self.rooms[stairs][1] = "The Stairs down!"
+        self.rooms[stairs][0].add('>')
+        for room in self.rooms:
+            if room[1] == "":
+                new_event = sample(EVENTS, randint(1, 2))
+                if len(new_event) > 1:
+                    room[1] = ' and '.join(new_event)
+                else:
+                    room[1] = str(new_event[0])
 
     # Internal Helper Functions
     def _players_room(self):
@@ -91,12 +93,12 @@ class Dungeon:
          Once a room is chosen it is added to the in_progress list"""
         if not self.roomcheck(room_id):
             return False
-        logging.debug("Rooms: " + str(self.rooms))
+        logging.debug("Rooms: " + pformat(self.rooms))
         candidates = self.unused + self.in_progress
         if room_id in candidates:
             candidates.remove(room_id)
         chosen = sample(candidates, randint(1, 3))
-        logging.debug("Room ID: " + str(room_id) + " Chosen: " + str(chosen))
+        logging.debug("Room ID: " + pformat(room_id) + " Chosen: " + pformat(chosen))
         for x in chosen:
             self.rooms[x][0].add(room_id)
             if x not in self.in_progress:
@@ -118,6 +120,7 @@ def start(name):
     return instance
 
 def end(instance):
+    """Destroys the instance"""
     del instance
     return True
 
@@ -126,5 +129,3 @@ if __name__ == '__main__':
     CURR.print_dungeon()
     logging.debug(CURR.player)
     logging.debug(CURR.rooms[0])
-
-
