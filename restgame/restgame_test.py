@@ -6,9 +6,6 @@ inst_test = start("foo")
 
 class DungeonValid(unittest.TestCase):
 
-	def setUp(self):
-		inst_test = start("foo")
-
 	def tearDown(self):
 		end(inst_test)
 
@@ -28,6 +25,7 @@ class DungeonValid(unittest.TestCase):
 	def testMoveFail(self):
 		self.assertFalse(inst_test.move(3))
 		
+
 def main():
 	unittest.main()
 
