@@ -3,8 +3,7 @@
 # This is the main functionality for the rest game
 # This will include the dungeon object definition and some core utilities
 # Later there may be a point to refactor the utilities into their own files
-from random import sample
-from random import randint
+from random import sample, randint
 from pprint import pformat
 import logging
 import json
