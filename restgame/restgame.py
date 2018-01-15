@@ -8,7 +8,7 @@ from pprint import pformat
 import logging
 import json
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 global CURR
 global EVENTS
 EVENTS = ['Nothing', 'Monster', 'Treasure', 'Maw of madness', 'Spiraling shape']
@@ -26,6 +26,7 @@ class Dungeon:
         self.floor = 1
         logging.debug("Rooms: " + pformat(self.rooms) + "unused: " + pformat(self.unused))
         self.player = {"name" : name, "pos" : 1}
+        self.print_dungeon()
 
     def rebuild(self):
         """Rebuild the floor"""
@@ -41,7 +42,7 @@ class Dungeon:
     def print_dungeon(self):
         """show every room -> adjacent options"""
         for idx, room in enumerate(self.rooms):
-            logging.debug(pformat(idx) + " " + pformat(room[1]) + " -> " + pformat(room[0]))
+            logging.info(pformat(idx) + " " + pformat(room[1]) + " -> " + pformat(room[0]))
 
     def roomcheck(self, room_id):
         """Room validation utility, can be used for ensuring a room is defined"""

@@ -6,6 +6,11 @@ This game involves a dungeon with events and a player that can move around.
 The server requires Python >=2.7, Flask >= 0.12, Werkzeug >= 0.14, Jinja2 >= 2.10
 The client interface can be accessed using any Web request generator, manual testing/playthroughs were done with Postman
 
+Run `python setup.py install`
+Then set `export FLASK_APP=base.py`
+Do a `flask run`
+It is now available and will show the dungeon on the server after every request
+
 Currently the REST api is not fully connected using Flask, more testing
 At this time Start Quest will work successfully but the rest will return 500 errors.
 
