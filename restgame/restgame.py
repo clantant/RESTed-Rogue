@@ -7,8 +7,10 @@ from random import sample
 from random import randint
 import logging
 
-logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 global CURR
+global EVENTS
+EVENTS=['Nothing', 'Monster', 'Treasure', 'Maw of madness', 'Spiraling shape']
 
 class Dungeon:
     """this is our main object and represents all of the rooms on 1 floor and the player"""
@@ -22,8 +24,8 @@ class Dungeon:
         self.used = []
         self.rooms = [[[1], "Entrance"]]
         self.room_build()
+        self.event_assign()
         logging.debug("Rooms: " + str(self.rooms) + "unused: " + str(self.unused))
-#               self.rooms=[[[2],"Entrance"],[[1,3],"Nothing"],[[2],"Dead-end"]]
         self.player = {"name" : name, "pos" : 1}
 
     def print_dungeon(self):
@@ -66,6 +68,19 @@ class Dungeon:
             self._add_adj(room_id)
             self._clean_lists
 
+    def event_assign(self):
+      """Choose end stairs and assign 1 or 2 random events to the rest of the rooms"""
+      stairs = randint(1, self.cap - 1)
+      logging.debug("Room chosen for stairs: " + str(stairs))
+      self.rooms[stairs][1] = "The Stairs down!"
+      for room in self.rooms:
+        if room[1] == "":
+          new_event = sample(EVENTS, randint(1,2))
+          if len(new_event) > 1:
+            room[1] = ' and '.join(new_event)
+          else:
+            room[1] = str(new_event[0])
+
     # Internal Helper Functions
     def _players_room(self):
         """Return player's current room, check the room list at the player's position"""
@@ -82,12 +97,12 @@ class Dungeon:
             candidates.remove(room_id)
         chosen = sample(candidates, randint(1, 3))
         logging.debug("Room ID: " + str(room_id) + " Chosen: " + str(chosen))
-        self.rooms[room_id][0] |= set(chosen)
         for x in chosen:
             self.rooms[x][0].add(room_id)
             if x not in self.in_progress:
                 self.in_progress.append(x)
                 self.unused.remove(x)
+        self.rooms[room_id][0] |= set(chosen)
         return True
 
     def _clean_lists(self):
@@ -111,3 +126,5 @@ if __name__ == '__main__':
     CURR.print_dungeon()
     logging.debug(CURR.player)
     logging.debug(CURR.rooms[0])
+
+
