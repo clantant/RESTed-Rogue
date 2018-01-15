@@ -19,20 +19,24 @@ class Dungeon:
     def __init__(self, name):
         """Set maxes and limits"""
         self.cap = 10
-        self.width = 4
         self.unused = [x for x in range(1, self.cap)]
         self.in_progress = []
         self.used = []
-        self.reinit()
+        self.rebuild()
         self.floor = 1
         logging.debug("Rooms: " + pformat(self.rooms) + "unused: " + pformat(self.unused))
         self.player = {"name" : name, "pos" : 1}
 
-    def reinit(self):
+    def rebuild(self):
         """Rebuild the floor"""
         self.rooms = [[[1], "Entrance"]]
         self.room_build()
         self.event_assign()
+
+    def reinit(self, rooms, player):
+        """Reassign rooms and player variables to reproduce the object"""
+        self.rooms = rooms
+        self.player = player
 
     def print_dungeon(self):
         """show every room -> adjacent options"""
@@ -100,6 +104,10 @@ class Dungeon:
         stats = json.dumps({"map":{"adjacent_rooms":pformat(current_room[0]),"current_room":pformat(self.player["pos"] - 1)},"floor":pformat(self.floor),"name":pformat(self.player["name"])})
         return stats
 
+    def roomlist(self):
+        """Returns a json form of the rooms"""
+        return json.dumps(pformat(self.rooms))
+
     # Internal Helper Functions
     def _players_room(self):
         """Return player's current room, check the room list at the player's position"""
@@ -130,6 +138,10 @@ class Dungeon:
             self.used.append(x)
             self.in_progress.remove(x)
 
+def reinit_dungeon(rooms, player):
+    instance = Dungeon("temp")
+    instance.reinit(rooms, player)
+    return instance
 
 def start(name):
     """starts the game and initializes the dungeon object"""
